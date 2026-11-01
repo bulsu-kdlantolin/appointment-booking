@@ -1,0 +1,17 @@
+{% extends "appointments/base.html" %}
+{% block content %}
+  <h2>Upcoming appointments</h2>
+  {% if appointments %}
+    <ul>
+      {% for appointment in appointments %}
+        <li>
+          <a href="{% url 'appointments:detail' appointment.pk %}">{{ appointment.client_name }}</a>
+          <span class="meta">- {{ appointment.get_service_display }},
+            {{ appointment.scheduled_for|date:"M j, Y g:i A" }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No appointments yet. Add some in the <a href="/admin/">admin site</a>.</p>
+  {% endif %}
+{% endblock %}

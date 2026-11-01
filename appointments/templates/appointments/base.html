@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Appointments{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    h1 { border-bottom: 3px solid #0b5; padding-bottom: .3rem; }
+    a { color: #075; }
+    ul { padding-left: 1.2rem; }
+    li { margin: .5rem 0; }
+    .meta { color: #666; font-size: .9rem; }
+    dt { font-weight: 600; margin-top: .8rem; }
+    dd { margin: 0; }
+  </style>
+</head>
+<body>
+  <h1>Appointment Booking</h1>
+  {% block content %}{% endblock %}
+</body>
+</html>

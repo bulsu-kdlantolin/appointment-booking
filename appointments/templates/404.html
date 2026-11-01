@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found | Appointment Booking</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --accent: #0b8f69;
+      --accent-dark: #076449;
+      --panel: #ffffff;
+      --background: #f1f8f5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      align-items: center;
+      background: radial-gradient(circle at top right, #d8f1e8, transparent 36%), var(--background);
+      color: var(--ink);
+      display: flex;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      justify-content: center;
+      margin: 0;
+      min-height: 100vh;
+      padding: 2rem 1.25rem;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #dcece6;
+      border-radius: 1.5rem;
+      box-shadow: 0 1.5rem 4rem rgba(23, 32, 51, .1);
+      max-width: 38rem;
+      padding: 3.5rem 2rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .illustration {
+      align-items: center;
+      background: #e1f5ed;
+      border-radius: 50%;
+      color: var(--accent);
+      display: flex;
+      font-size: 2.5rem;
+      font-weight: 800;
+      height: 6rem;
+      justify-content: center;
+      margin: 0 auto 1.75rem;
+      width: 6rem;
+    }
+
+    .code {
+      color: var(--accent);
+      font-size: .85rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      margin: 0 0 .75rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.25rem);
+      letter-spacing: -.04em;
+      margin: 0 0 1rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0 auto 2rem;
+      max-width: 28rem;
+    }
+
+    a {
+      background: var(--accent);
+      border-radius: .75rem;
+      color: #fff;
+      display: inline-block;
+      font-weight: 700;
+      padding: .85rem 1.25rem;
+      text-decoration: none;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    a:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    a:focus-visible {
+      outline: 3px solid #9de2ca;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="illustration" aria-hidden="true">?</div>
+    <p class="code">Error 404</p>
+    <h1>Page not found</h1>
+    <p>The page you are looking for may have moved, been removed, or never existed.</p>
+    <a href="{% url 'appointments:home' %}">Return to appointments</a>
+  </main>
+</body>
+</html>
