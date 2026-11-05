@@ -48,7 +48,7 @@ Follow these simple steps to set up and run the project locally on your device.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/appointment-booking.git
+git clone https://github.com/bulsu-kdlantolin/appointment-booking.git
 cd appointment-booking
 ```
 
