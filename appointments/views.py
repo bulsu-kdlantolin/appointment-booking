@@ -1,13 +1,16 @@
+from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Appointment
+from .models import Appointment, Service
 from .forms import AppointmentForm
 
 
 def appointment_list(request):
     q = request.GET.get("q", "").strip()
     status = request.GET.get("status", "")
+    service_id = request.GET.get("service", "").strip()
+    date_filter = request.GET.get("date", "").strip()
     show_archived = request.GET.get("archived") == "1"
 
     if show_archived:
@@ -24,14 +27,43 @@ def appointment_list(request):
         appointments = appointments.filter(client__full_name__icontains=q)
     if status:
         appointments = appointments.filter(status=status)
+    if service_id:
+        appointments = appointments.filter(service_id=service_id)
+    if date_filter:
+        today = timezone.localdate()
+        if date_filter == "today":
+            appointments = appointments.filter(scheduled_at__date=today)
+        elif date_filter == "tomorrow":
+            appointments = appointments.filter(scheduled_at__date=today + timedelta(days=1))
+        elif date_filter == "week":
+            appointments = appointments.filter(
+                scheduled_at__date__gte=today,
+                scheduled_at__date__lte=today + timedelta(days=7),
+            )
+        elif date_filter == "month":
+            appointments = appointments.filter(
+                scheduled_at__year=today.year,
+                scheduled_at__month=today.month,
+            )
+        else:
+            try:
+                parsed_date = datetime.strptime(date_filter, "%Y-%m-%d").date()
+                appointments = appointments.filter(scheduled_at__date=parsed_date)
+            except ValueError:
+                pass
+
+    services = Service.objects.all().order_by("name")
 
     return render(
         request,
         "appointments/appointment_list.html",
         {
             "appointments": appointments,
+            "services": services,
             "q": q,
             "status": status,
+            "service_id": service_id,
+            "date_filter": date_filter,
             "show_archived": show_archived,
         },
     )

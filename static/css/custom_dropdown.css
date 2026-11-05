@@ -2,7 +2,8 @@
 .custom-dropdown-container {
   position: relative;
   width: 100%;
-  max-width: 42rem; /* matches max-w-2xl */
+  max-width: 42rem;
+  /* matches max-w-2xl */
   user-select: none;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -34,6 +35,7 @@
 .custom-dropdown-trigger:hover {
   border-color: #93c5fd;
 }
+
 .dark .custom-dropdown-trigger:hover {
   border-color: #3b82f6;
 }
@@ -138,14 +140,14 @@
 }
 
 .custom-dropdown-option.is-selected {
-  background-color: #f0fdf4;
-  color: #15803d;
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
   font-weight: 600;
 }
 
 .dark .custom-dropdown-option.is-selected {
-  background-color: rgba(20, 83, 45, 0.35);
-  color: #4ade80;
+  background-color: rgba(37, 99, 235, 0.22) !important;
+  color: #93c5fd !important;
 }
 
 .custom-dropdown-check {
@@ -153,6 +155,11 @@
   line-height: 1;
   opacity: 0;
   transition: opacity 0.15s;
+  color: #2563eb !important;
+}
+
+.dark .custom-dropdown-check {
+  color: #60a5fa !important;
 }
 
 .custom-dropdown-option.is-selected .custom-dropdown-check {
@@ -160,17 +167,17 @@
 }
 
 /* Prevent duplicate dropdown chevrons */
-.grow.relative > select ~ span.material-symbols-outlined,
-.relative > select ~ span.material-symbols-outlined,
-.custom-dropdown-container ~ span.material-symbols-outlined,
-select[data-custom-dropdown-initialized] ~ span.material-symbols-outlined {
+.grow.relative>select~span.material-symbols-outlined,
+.relative>select~span.material-symbols-outlined,
+.custom-dropdown-container~span.material-symbols-outlined,
+select[data-custom-dropdown-initialized]~span.material-symbols-outlined {
   display: none !important;
 }
 
 
 /* Changelist Bottom-Right Actions Bar Custom Dropdown */
-.action-select-container .relative > span.material-symbols-outlined,
-.action-select-container > span.material-symbols-outlined {
+.action-select-container .relative>span.material-symbols-outlined,
+.action-select-container>span.material-symbols-outlined {
   display: none !important;
 }
 
@@ -213,6 +220,3 @@ select[data-custom-dropdown-initialized] ~ span.material-symbols-outlined {
   font-size: 0.8125rem;
   border-radius: 0.5rem;
 }
-
-
-

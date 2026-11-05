@@ -14,6 +14,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -22,7 +23,8 @@
           }
         }
       }
-    }
+    };
+    document.documentElement.classList.remove("dark");
   </script>
   <style>
     body,
@@ -96,6 +98,59 @@
       border-color: #2563eb;
       box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
       transform: translateY(-1px);
+    }
+
+    /* Modern Custom Checkbox */
+    input[type="checkbox"],
+    label:has(input[type="checkbox"]) {
+      cursor: pointer !important;
+    }
+
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 1.125rem;
+      height: 1.125rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 0.375rem;
+      background-color: #ffffff;
+      cursor: pointer !important;
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      flex-shrink: 0;
+      transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    }
+
+    input[type="checkbox"]:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+
+    input[type="checkbox"]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3.5 8.5 6.5 11.5 12.5 4.5'/%3E%3C/svg%3E");
+      background-position: center;
+      background-size: 75% 75%;
+      background-repeat: no-repeat;
+    }
+
+    input[type="checkbox"]:indeterminate {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='8' x2='12' y2='8'/%3E%3C/svg%3E");
+      background-position: center;
+      background-size: 70% 70%;
+      background-repeat: no-repeat;
     }
 
     [data-form-dropdown][data-open="true"] [data-form-menu] {

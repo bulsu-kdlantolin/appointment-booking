@@ -29,11 +29,11 @@
                         {% for item in group.items %}
                             {% if item.has_permission %}
                                 <li {% if item.items|is_list %}x-data="{'subnavigationOpen': true}"{% endif %}>
-                                    <a {% if item.items|is_list and item.items|length > 0 %}x-on:click="subnavigationOpen = !subnavigationOpen"{% else %}href="{% if item.link_callback %}{{ item.link_callback }}{% else %}{{ item.link }}{% endif %}"{% endif %} class="cursor-pointer group flex min-h-[48px] items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-150 text-[16px] font-semibold text-slate-700 dark:text-slate-200 hover:bg-base-100 hover:text-primary-600 dark:hover:bg-white/[.06] dark:hover:text-primary-400 {% if item.active %}bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-400 active font-bold shadow-xs{% endif %}" {% if item.link_attrs %}{% include "unfold/helpers/attrs.html" with attrs=item.link_attrs %}{% endif %}>
+                                    <a {% if item.items|is_list and item.items|length > 0 %}x-on:click="subnavigationOpen = !subnavigationOpen"{% else %}href="{% if item.link_callback %}{{ item.link_callback }}{% else %}{{ item.link }}{% endif %}"{% endif %} class="cursor-pointer group flex min-h-[48px] items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-150 text-[16px] font-semibold text-slate-700 dark:text-slate-200 hover:bg-base-100 hover:text-primary-600 dark:hover:bg-white/[.06] dark:hover:text-white {% if not item.items|is_list or item.items|length == 0 %}{% if item.active %}bg-primary-50 text-primary-600 active font-bold shadow-xs{% endif %}{% else %}{% if item.active %}text-slate-900 dark:text-white font-bold{% endif %}{% endif %}" {% if item.link_attrs %}{% include "unfold/helpers/attrs.html" with attrs=item.link_attrs %}{% endif %}>
                                         {% if item.icon_template %}
                                             {% include item.icon_template with item=item %}
                                         {% elif item.icon %}
-                                            <span class="material-symbols-outlined text-[24px] w-[24px] shrink-0 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400 select-none {% if item.active %}text-primary-600 dark:text-primary-400{% else %}text-slate-500 dark:text-slate-400{% endif %}">
+                                            <span class="material-symbols-outlined text-[24px] w-[24px] shrink-0 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400 select-none {% if item.active %}text-primary-600 dark:text-blue-400{% else %}text-slate-500 dark:text-slate-400{% endif %}">
                                                 {{ item.icon }}
                                             </span>
                                         {% endif %}
@@ -43,7 +43,7 @@
                                         {% include "unfold/helpers/app_list_badge.html" with item=item %}
 
                                         {% if item.items|is_list and item.items|length > 0 %}
-                                            <span class="material-symbols-outlined ml-auto text-[22px] select-none transition-transform duration-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 rtl:ml-0 rtl:mr-auto rtl:-scale-x-100" x-bind:class="{'rotate-90 rtl:-rotate-90': subnavigationOpen}">
+                                            <span class="material-symbols-outlined ml-auto text-[22px] select-none transition-transform duration-200 group-hover:text-primary-600 dark:group-hover:text-white rtl:ml-0 rtl:mr-auto rtl:-scale-x-100 {% if item.active %}text-primary-600 dark:text-blue-400{% else %}text-slate-400 dark:text-slate-500{% endif %}" x-bind:class="{'rotate-90 rtl:-rotate-90': subnavigationOpen}">
                                                 chevron_right
                                             </span>
                                         {% endif %}
@@ -54,9 +54,9 @@
                                             {% for subitem in item.items %}
                                                 {% if subitem.has_permission %}
                                                     <li>
-                                                        <a href="{% if subitem.link_callback %}{{ subitem.link_callback }}{% else %}{{ subitem.link }}{% endif %}" class="group/sub flex items-center gap-3 min-h-[42px] px-3.5 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-150 {% if subitem.active %}bg-primary-50 text-primary-600 font-bold dark:bg-primary-950/40 dark:text-primary-400 shadow-xs{% else %}text-slate-600 dark:text-slate-400 hover:bg-base-100 hover:text-primary-600 dark:hover:bg-white/[.06] dark:hover:text-primary-400{% endif %}">
+                                                        <a href="{% if subitem.link_callback %}{{ subitem.link_callback }}{% else %}{{ subitem.link }}{% endif %}" class="group/sub flex items-center gap-3 min-h-[42px] px-3.5 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-150 {% if subitem.active %}active bg-primary-50 text-primary-600 font-bold border border-primary-200/50 shadow-xs{% else %}text-slate-600 dark:text-slate-400 hover:bg-base-100 hover:text-primary-600 dark:hover:bg-white/[.06] dark:hover:text-white{% endif %}">
                                                             {% if subitem.icon %}
-                                                                <span class="material-symbols-outlined text-[21px] w-[21px] shrink-0 transition-colors select-none {% if subitem.active %}text-primary-600 dark:text-primary-400{% else %}text-slate-400 group-hover/sub:text-primary-600 dark:text-slate-500 dark:group-hover/sub:text-primary-400{% endif %}">
+                                                                <span class="material-symbols-outlined text-[21px] w-[21px] shrink-0 transition-colors select-none {% if subitem.active %}text-primary-600 dark:text-blue-400{% else %}text-slate-400 group-hover/sub:text-primary-600 dark:text-slate-500 dark:group-hover/sub:text-slate-200{% endif %}">
                                                                     {{ subitem.icon }}
                                                                 </span>
                                                             {% endif %}

@@ -341,9 +341,34 @@ class AppointmentWorkflowTests(TestCase):
         response = self.client.get(reverse("appointments:list"))
         self.assertContains(response, "2:00 PM")
         self.assertContains(response, 'id="appointment-filters"')
+        self.assertContains(response, 'Filter by:')
+        self.assertContains(response, 'data-service-dropdown')
+        self.assertContains(response, 'data-date-dropdown')
         self.assertContains(response, 'searchField.addEventListener("input"')
         self.assertContains(response, 'statusToggle.addEventListener("click"')
         self.assertContains(response, 'appointmentFilters.submit()')
+
+    def test_list_filters_by_service_and_date(self):
+        service_b = Service.objects.create(name="Service Beta", duration_minutes=30)
+        appt_a = Appointment.objects.create(
+            client=self.client_obj,
+            service=self.service,
+            scheduled_at=self._slot(days=1),
+        )
+        appt_b = Appointment.objects.create(
+            client=self.client_obj,
+            service=service_b,
+            scheduled_at=self._slot(days=2),
+        )
+
+        # Filter by service
+        resp = self.client.get(reverse("appointments:list"), {"service": str(service_b.pk)})
+        self.assertEqual(resp.context["appointments"].count(), 1)
+        self.assertEqual(resp.context["appointments"].first(), appt_b)
+
+        # Filter by date today / tomorrow
+        resp_date = self.client.get(reverse("appointments:list"), {"date": "tomorrow"})
+        self.assertIn(appt_a, resp_date.context["appointments"])
 
     def test_form_uses_themed_date_time_picker(self):
         response = self.client.get(reverse("appointments:create"))
@@ -470,4 +495,18 @@ class UserGroupPermissionsTests(TestCase):
         self.client.login(username="staff_member", password="password123")
         add_response = self.client.get("/admin/appointments/appointment/add/")
         self.assertEqual(add_response.status_code, 200)
+
+    def test_custom_404_page_fonts_and_structure(self):
+        self.client.login(username="staff_member", password="password123")
+        response = self.client.get("/admin/nonexistent-test-route/")
+        self.assertEqual(response.status_code, 404)
+        self.assertContains(response, "Page not found", status_code=404)
+        self.assertContains(response, "Inter", status_code=404)
+        self.assertContains(response, "Plus+Jakarta+Sans", status_code=404)
+        self.assertNotContains(response, "theme-toggle-btn", status_code=404)
+
+        pub_response = self.client.get("/nonexistent-public-url/")
+        self.assertEqual(pub_response.status_code, 404)
+        self.assertContains(pub_response, "Page not found", status_code=404)
+
 
