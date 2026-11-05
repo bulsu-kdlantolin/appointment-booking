@@ -1,0 +1,152 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list unfold_list %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <script src="{% url 'admin:jsi18n' %}"></script>
+
+    {{ media.css }}
+
+    {% if not actions_on_top and not actions_on_bottom %}
+        <style>
+            #changelist table thead th:first-child {width: inherit}
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media.js }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
+
+{% block coltype %}{% endblock %}
+
+{% block nav-global-side %}{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        {% if cl.formset and cl.formset.errors %}
+            {% include "unfold/helpers/messages/errornote.html" with errors=cl.formset.errors %}
+
+            {{ cl.formset.non_form_errors }}
+        {% endif %}
+
+        <div class="flex -mx-4 module{% if cl.has_filters %} filtered{% endif %}" id="changelist" x-data="{ changeListWidth: 0 }">
+            <div class="result-list-wrapper changelist-form-container flex flex-row grow gap-4 min-w-0 px-4">
+                <div class="grow min-w-0" x-resize="changeListWidth = $width">
+                    {% block date_hierarchy %}
+                        {% if cl.date_hierarchy %}
+                            {% date_hierarchy cl %}
+                        {% endif %}
+                    {% endblock %}
+
+                    {% if cl.model_admin.list_before_template and not is_popup %}
+                        {% include cl.model_admin.list_before_template %}
+                    {% endif %}
+
+                    {% spaceless %}
+                        <div class="flex flex-col mb-4 lg:border lg:border-base-200 lg:dark:border-base-800 lg:-mb-8 lg:p-3 lg:pb-11 lg:rounded-t-default relative">
+                            <div class="flex flex-col flex-wrap gap-3 sm:flex-row empty:hidden items-center w-full">
+                                {% block search %}
+                                    {% search_form cl %}
+                                {% endblock %}
+
+                                {% include "unfold/helpers/change_list_filter_horizontal.html" %}
+
+                                {% block filters %}
+                                    {% if cl.has_filters and cl|unfold_vertical_filters|length > 0 %}
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <div class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 select-none mr-1">
+                                                <span class="material-symbols-outlined text-[18px] text-slate-400 dark:text-slate-500">filter_list</span>
+                                                <span>Filter by:</span>
+                                            </div>
+                                            {% for spec in cl|unfold_vertical_filters %}
+                                                <div class="relative filter-item-dropdown" x-data="{ open: false }">
+                                                    <button type="button"
+                                                            class="filter-button bg-white border-base-200 hover:text-primary-600 dark:bg-base-900 dark:border-base-700 dark:hover:text-primary-500 border cursor-pointer flex font-medium gap-2 items-center px-3.5 py-2 rounded-default shadow-xs text-sm transition-colors whitespace-nowrap"
+                                                            x-bind:class="{ '!bg-primary-50 !border-primary-400 !text-primary-700 dark:!bg-primary-950/40 dark:!border-primary-600 dark:!text-primary-300 font-semibold': open }"
+                                                            x-on:click="open = !open"
+                                                            x-on:keydown.escape.window="open = false"
+                                                            title="Filter by {{ spec.title|capfirst }}">
+                                                        <span>{{ spec.title|capfirst }}</span>
+                                                        <span class="material-symbols-outlined text-[18px] transition-transform duration-200"
+                                                              x-bind:class="{ 'rotate-180': open }">expand_more</span>
+                                                    </button>
+
+                                                    <!-- FLOATING INDIVIDUAL FILTER DROPDOWN POPOVER -->
+                                                    <div x-show="open"
+                                                         x-cloak
+                                                         x-on:click.outside="open = false"
+                                                         x-transition:enter="transition ease-out duration-150"
+                                                         x-transition:enter-start="opacity-0 translate-y-1 scale-95"
+                                                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                                         x-transition:leave="transition ease-in duration-100"
+                                                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                                                         x-transition:leave-end="opacity-0 translate-y-1 scale-95"
+                                                         class="absolute left-0 top-full mt-2 min-w-[240px] max-w-[320px] max-h-[360px] overflow-y-auto bg-white dark:bg-base-900 border border-base-200 dark:border-base-700 rounded-default shadow-2xl z-50 p-3 scrollbar-default">
+                                                        <div class="filter-spec-content text-xs">
+                                                            {% unfold_admin_list_filter cl spec %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+
+                                            {% if cl.has_active_filters %}
+                                                <a href="{{ cl.clear_all_filters_qs }}"
+                                                   class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 rounded-default border border-transparent hover:border-red-200 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors whitespace-nowrap cursor-pointer"
+                                                   title="Reset all filters">
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                    <span>Reset</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endblock %}
+
+                                {% if has_add_permission %}
+                                    {% url cl.opts|admin_urlname:"add" as add_url %}
+                                    {% if add_url %}
+                                        <a href="{% add_preserved_filters add_url is_popup to_field %}"
+                                           class="inline-flex items-center gap-2 px-4 py-2 rounded-default bg-primary-600 text-white font-semibold text-sm shadow-xs hover:bg-primary-500 hover:text-white transition-colors lg:ms-auto cursor-pointer">
+                                            <span class="material-symbols-outlined text-[18px]">add</span>
+                                            <span>Add {{ cl.opts.verbose_name }}</span>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endspaceless %}
+
+                    <form id="changelist-form" class="group" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>
+                        {% csrf_token %}
+
+                        {% if cl.formset %}
+                            {{ cl.formset.management_form }}
+                        {% endif %}
+
+                        {% block result_list %}
+                            {% include "unfold/helpers/change_list_actions.html" %}
+
+                            {% unfold_result_list cl %}
+                        {% endblock %}
+                    </form>
+
+                    {% if cl.model_admin.list_after_template and not is_popup %}
+                        {% include cl.model_admin.list_after_template %}
+                    {% endif %}
+                </div>
+
+                {% include "unfold/helpers/change_list_filter_vertical.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% block pagination %}
+        {% include "unfold/helpers/pagination.html" %}
+    {% endblock %}
+{% endblock %}

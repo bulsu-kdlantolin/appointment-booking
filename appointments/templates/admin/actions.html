@@ -1,0 +1,87 @@
+{% load i18n %}
+
+<div id="changelist-actions"
+     class="actions bg-white dark:bg-base-900 border border-slate-200/80 dark:border-slate-800/80 shadow-2xl rounded-2xl py-3 px-5 sm:py-3.5 sm:px-6 flex items-center gap-5 text-font-default-light dark:text-font-default-dark transition-all duration-200"
+     x-data="{action: 'delete_selected', selectAcross: 0}">
+    {% block actions %}
+        {% block actions-counter %}
+            {% if actions_selection_counter %}
+                <div class="flex items-center gap-3">
+                    <span class="action-counter text-sm font-semibold text-black dark:text-white whitespace-nowrap select-none"
+                          data-actions-icnt="{{ cl.result_list|length }}">
+                        {{ selection_note }}
+                    </span>
+
+                    {% if cl.result_count != cl.result_list|length %}
+                        <span class="all hidden text-xs text-base-500 font-medium">
+                            {{ selection_note_all }}
+                        </span>
+
+                        {% if not cl.model_admin.list_disable_select_all %}
+                            <span class="question hidden">
+                                <a href="#" class="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 underline underline-offset-2" title="Select all across pages">
+                                    <span>Select all {{ cl.result_count }} {{ module_name }}</span>
+                                </a>
+                            </span>
+
+                            <span class="clear hidden">
+                                <a href="#" class="text-xs font-medium text-red-600 hover:text-red-700 dark:text-red-400 underline underline-offset-2">
+                                    <span>Clear selection</span>
+                                </a>
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        <div class="flex items-center gap-3 ms-1">
+            {% if action_form.fields.action.choices|length <= 2 %}
+                {# Only delete_selected is available: direct Delete button, no redundant dropdown #}
+                <input type="hidden" name="action" value="delete_selected">
+                <input type="hidden" name="select_across" value="0" class="select-across">
+
+                <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+                        title="Delete selected {{ module_name }}"
+                        name="index"
+                        value="{{ action_index|default:0 }}">
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                    <span>Delete</span>
+                </button>
+            {% else %}
+                {# Multiple actions: show custom selector dropdown and Run button #}
+                {% block actions-form %}
+                    {% for field in action_form %}
+                        {% if field.is_hidden %}
+                            {{ field }}
+                        {% else %}
+                            <div class="action-select-container relative min-w-[200px] max-w-[260px]">
+                                {{ field }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+
+                {% block actions-submit %}
+                    <button type="submit"
+                            x-show="action"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+                            title="{% translate "Run the selected action" %}"
+                            name="index"
+                            value="{{ action_index|default:0 }}">
+                        <span>{% trans "Run" %}</span>
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                {% endblock %}
+            {% endif %}
+
+            <button type="button"
+                    onclick="(function(){ document.querySelectorAll('#changelist-form input.action-select:checked').forEach(function(cb){ cb.checked = false; cb.dispatchEvent(new Event('change', {bubbles: true})); }); var t = document.querySelector('#action-toggle'); if(t){ t.checked = false; t.dispatchEvent(new Event('change', {bubbles: true})); } })()"
+                    class="p-1.5 rounded-lg text-base-400 hover:text-base-700 dark:hover:text-base-200 hover:bg-base-100 dark:hover:bg-base-800 transition-colors cursor-pointer flex items-center justify-center"
+                    title="Deselect all">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+        </div>
+    {% endblock %}
+</div>

@@ -1,0 +1,428 @@
+/**
+ * Unified Flatpickr Theme
+ * Shared across Public Frontend and Django Admin for complete visual consistency.
+ */
+
+/* Flatpickr Calendar - Full Width & Clean Days Grid */
+.flatpickr-calendar {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.875rem !important;
+  box-sizing: border-box !important;
+  width: 332px !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.05) !important;
+  overflow: visible !important;
+  padding: 10px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  direction: ltr !important;
+  z-index: 99999 !important;
+}
+
+/* Prevent arrow tails from clipping or misaligning */
+.flatpickr-calendar:before,
+.flatpickr-calendar:after {
+  display: none !important;
+}
+
+/* Month Header & Perfectly Aligned Arrows */
+.flatpickr-months {
+  position: relative !important;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  margin-bottom: 6px !important;
+  padding: 0 !important;
+}
+
+.flatpickr-months .flatpickr-month {
+  height: 38px !important;
+  background: transparent !important;
+  color: #0f172a !important;
+  fill: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 !important;
+  overflow: visible !important;
+}
+
+.flatpickr-current-month {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.flatpickr-current-month .cur-month {
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-left: 0 !important;
+}
+
+.flatpickr-current-month input.cur-year {
+  appearance: textfield !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  padding: 0 !important;
+  width: 3.75rem !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+}
+
+.flatpickr-current-month input.cur-year::-webkit-inner-spin-button,
+.flatpickr-current-month input.cur-year::-webkit-outer-spin-button,
+.flatpickr-time input::-webkit-inner-spin-button,
+.flatpickr-time input::-webkit-outer-spin-button {
+  appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Prev & Next Month Navigation Arrows - Centered Vertically */
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0.5rem !important;
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: background 0.15s ease !important;
+}
+
+.flatpickr-months .flatpickr-prev-month {
+  left: 2px !important;
+}
+
+.flatpickr-months .flatpickr-next-month {
+  right: 2px !important;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+  background: #dbeafe !important;
+}
+
+.flatpickr-months .flatpickr-prev-month svg,
+.flatpickr-months .flatpickr-next-month svg {
+  width: 12px !important;
+  height: 12px !important;
+  fill: #475569 !important;
+  stroke: none !important;
+  transition: fill 0.15s ease !important;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: #2563eb !important;
+}
+
+/* Weekday Header Row */
+.flatpickr-weekdays {
+  width: 308px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding-bottom: 4px !important;
+  margin-bottom: 4px !important;
+  background: transparent !important;
+}
+
+.flatpickr-weekdaycontainer {
+  width: 100% !important;
+  display: flex !important;
+}
+
+span.flatpickr-weekday {
+  flex: 1 !important;
+  text-align: center !important;
+  color: #64748b !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Days Grid - 308px Fits All 7 Columns Exactly */
+.flatpickr-days {
+  width: 308px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  overflow: visible !important;
+}
+
+.dayContainer {
+  width: 308px !important;
+  min-width: 308px !important;
+  max-width: 308px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  padding: 0 !important;
+}
+
+.flatpickr-day {
+  width: 44px !important;
+  max-width: 44px !important;
+  height: 38px !important;
+  line-height: 38px !important;
+  border-radius: 0.5rem !important;
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  border: 1px solid transparent !important;
+  margin: 0 !important;
+  text-align: center !important;
+  transition: all 0.12s ease !important;
+}
+
+.flatpickr-day:hover {
+  background: #eff6ff !important;
+  border-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+.flatpickr-day.today {
+  border-color: #93c5fd !important;
+  color: #2563eb !important;
+  font-weight: 700 !important;
+}
+
+.flatpickr-day.today:hover {
+  background: #eff6ff !important;
+  border-color: #2563eb !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: #cbd5e1 !important;
+  cursor: not-allowed !important;
+}
+
+.flatpickr-day.flatpickr-disabled:hover {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* =========================================
+   Unified Floating Time Picker Popover
+   ========================================= */
+.flatpickr-calendar.hasTime.noCalendar {
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0.65rem 0.85rem !important;
+  border-radius: 0.875rem !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.05) !important;
+}
+
+.flatpickr-calendar.hasTime.noCalendar .flatpickr-time {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  line-height: normal !important;
+}
+
+/* Clean input boxes inside the time popup */
+.flatpickr-time .numInputWrapper {
+  height: 2.5rem !important;
+  width: 3.5rem !important;
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 0.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: border-color 0.15s, background-color 0.15s !important;
+}
+
+.flatpickr-time .numInputWrapper:focus-within {
+  border-color: #2563eb !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
+}
+
+.flatpickr-time input.flatpickr-hour,
+.flatpickr-time input.flatpickr-minute {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  text-align: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.flatpickr-time .flatpickr-time-separator {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  user-select: none !important;
+  line-height: 1 !important;
+  padding: 0 1px !important;
+}
+
+/* Hide legacy lightswitch AM/PM element */
+.flatpickr-time .flatpickr-am-pm {
+  display: none !important;
+}
+
+/* Modern Segmented Tab Switcher for AM / PM */
+.flatpickr-am-pm-segmented {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 0.5rem !important;
+  padding: 2.5px !important;
+  gap: 2px !important;
+  height: 2.5rem !important;
+  box-sizing: border-box !important;
+  margin-left: 0.25rem !important;
+}
+
+.dark .flatpickr-am-pm-segmented,
+[data-theme="dark"] .flatpickr-am-pm-segmented {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+.flatpickr-am-pm-segmented .am-pm-tab {
+  appearance: none !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  height: 100% !important;
+  min-width: 2.25rem !important;
+  padding: 0 0.65rem !important;
+  border-radius: 0.375rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #64748b !important;
+  background: transparent !important;
+  user-select: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+
+  .flatpickr-am-pm-segmented .am-pm-tab:hover:not(.is-active) {
+    color: #0f172a !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .dark .flatpickr-am-pm-segmented .am-pm-tab:hover:not(.is-active),
+  [data-theme="dark"] .flatpickr-am-pm-segmented .am-pm-tab:hover:not(.is-active) {
+    color: #f8fafc !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .flatpickr-am-pm-segmented .am-pm-tab.is-active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.3) !important;
+  }
+
+  .flatpickr-time .numInputWrapper span.arrowUp,
+  .flatpickr-time .numInputWrapper span.arrowDown {
+    position: absolute !important;
+    right: 0 !important;
+    width: 14px !important;
+    padding: 0 4px 0 2px !important;
+    height: 50% !important;
+    line-height: 50% !important;
+    cursor: pointer !important;
+    opacity: 0 !important;
+    transition: opacity 0.15s !important;
+  }
+
+  .flatpickr-time .numInputWrapper:hover span.arrowUp,
+  .flatpickr-time .numInputWrapper:hover span.arrowDown {
+    opacity: 0.6 !important;
+  }
+
+  .flatpickr-time .numInputWrapper span.arrowUp:hover,
+  .flatpickr-time .numInputWrapper span.arrowDown:hover {
+    opacity: 1 !important;
+  }
+
+  /* =========================================
+   Admin Disabling of Old Dialogs & Modals
+   ========================================= */
+  dialog.calendarbox,
+  .calendarbox,
+  dialog.clockbox,
+  .clockbox,
+  .exact-time-modal-backdrop,
+  #exact-time-modal {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Ensure admin date/time inputs show hand cursor */
+  .vDateField,
+  .vTimeField,
+  input.flatpickr-input,
+  .picker-input {
+    cursor: pointer !important;
+  }
+
+  /* Hide old textual shortcut links in admin but keep icon buttons */
+  .datetimeshortcuts a {
+    display: none !important;
+  }
+
+  .datetimeshortcuts button {
+    cursor: pointer !important;
+  }

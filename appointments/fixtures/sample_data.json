@@ -1,0 +1,143 @@
+[
+{
+  "model": "appointments.service",
+  "pk": 6,
+  "fields": {
+    "name": "test",
+    "duration_minutes": 60,
+    "active": true
+  }
+},
+{
+  "model": "appointments.service",
+  "pk": 7,
+  "fields": {
+    "name": "Haircut VIPP",
+    "duration_minutes": 45,
+    "active": false
+  }
+},
+{
+  "model": "appointments.service",
+  "pk": 8,
+  "fields": {
+    "name": "Service 1793798580",
+    "duration_minutes": 30,
+    "active": true
+  }
+},
+{
+  "model": "appointments.service",
+  "pk": 10,
+  "fields": {
+    "name": "Haircut & Styling",
+    "duration_minutes": 30,
+    "active": true
+  }
+},
+{
+  "model": "appointments.service",
+  "pk": 11,
+  "fields": {
+    "name": "Beard Grooming & Trim",
+    "duration_minutes": 30,
+    "active": true
+  }
+},
+{
+  "model": "appointments.service",
+  "pk": 12,
+  "fields": {
+    "name": "Full Consultation",
+    "duration_minutes": 60,
+    "active": true
+  }
+},
+{
+  "model": "appointments.client",
+  "pk": 6,
+  "fields": {
+    "full_name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1234567890"
+  }
+},
+{
+  "model": "appointments.client",
+  "pk": 20,
+  "fields": {
+    "full_name": "Maria Santos",
+    "email": "maria.santos@example.com",
+    "phone": "0918-234-5678"
+  }
+},
+{
+  "model": "appointments.client",
+  "pk": 21,
+  "fields": {
+    "full_name": "Carlos Mendoza",
+    "email": "carlos.m@example.com",
+    "phone": "0919-345-6789"
+  }
+},
+{
+  "model": "appointments.appointment",
+  "pk": 19,
+  "fields": {
+    "client": 6,
+    "service": 6,
+    "scheduled_at": "2026-11-16T20:30:00Z",
+    "status": "scheduled",
+    "notes": "edi wow",
+    "is_archived": false,
+    "archived_at": null,
+    "created_at": "2026-11-05T03:05:51.984Z",
+    "updated_at": "2026-11-05T13:44:53.103Z"
+  }
+},
+{
+  "model": "appointments.appointment",
+  "pk": 23,
+  "fields": {
+    "client": 6,
+    "service": 10,
+    "scheduled_at": "2026-11-07T10:00:00Z",
+    "status": "scheduled",
+    "notes": "First-time client preference for classic cut.",
+    "is_archived": false,
+    "archived_at": null,
+    "created_at": "2026-11-05T13:48:08.658Z",
+    "updated_at": "2026-11-05T13:48:08.658Z"
+  }
+},
+{
+  "model": "appointments.appointment",
+  "pk": 24,
+  "fields": {
+    "client": 20,
+    "service": 12,
+    "scheduled_at": "2026-11-04T14:00:00Z",
+    "status": "completed",
+    "notes": "Comprehensive consultation completed.",
+    "is_archived": false,
+    "archived_at": null,
+    "created_at": "2026-11-05T13:48:08.748Z",
+    "updated_at": "2026-11-05T13:48:08.748Z"
+  }
+},
+{
+  "model": "appointments.appointment",
+  "pk": 25,
+  "fields": {
+    "client": 21,
+    "service": 11,
+    "scheduled_at": "2026-11-02T09:00:00Z",
+    "status": "scheduled",
+    "notes": "Archived record for testing history retention.",
+    "is_archived": true,
+    "archived_at": "2026-11-05T13:00:00Z",
+    "created_at": "2026-11-05T13:48:08.848Z",
+    "updated_at": "2026-11-05T13:48:08.848Z"
+  }
+}
+]

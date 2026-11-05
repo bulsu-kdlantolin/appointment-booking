@@ -1,0 +1,56 @@
+{% load i18n static unfold %}
+
+{% if not is_popup %}
+<div class="flex flex-row gap-3 items-center ml-auto">
+    {% if environment %}
+    {% include "unfold/helpers/label.html" with text=environment.0 type=environment.1 %}
+    {% endif %}
+
+    {% action_list %}
+
+    {% if nav_global_side %}
+    {{ nav_global_side }}
+    {% endif %}
+
+    <div class="relative" x-data="{ openUserLinks: false }">
+            <div
+            class="cursor-pointer flex flex-row gap-3 items-center px-2 py-1.5 rounded-default hover:bg-base-100 dark:hover:bg-base-800 transition-colors"
+            x-on:click="if (!$event.target.closest('a')) { openUserLinks = !openUserLinks }"
+            x-bind:class="{'bg-base-100 dark:bg-base-800': openUserLinks, 'bg-transparent': !openUserLinks}">
+            <div class="shrink-0 mr-1">
+                {% include "unfold/helpers/avatar.html" with user=request.user size="sm" circle=True %}
+            </div>
+
+            <div class="flex flex-col select-none min-w-0 text-left">
+                <div class="font-semibold text-important text-sm tracking-tight truncate leading-tight">
+                    {{ request.user.get_full_name|default:request.user.get_username }}
+                </div>
+                {% if request.user.email %}
+                    <div class="text-subtle text-xs truncate max-w-[170px] leading-tight mt-0.5">
+                        {{ request.user.email }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                    <span
+                        class="material-symbols-outlined select-none text-font-subtle-light dark:text-font-subtle-dark text-lg ml-2 transition-transform duration-200"
+                        x-bind:class="{'rotate-180': openUserLinks}">
+                        expand_more
+                    </span>
+            </div>
+
+            <nav class="absolute bg-white border border-base-200 flex flex-col leading-none py-1 rounded-default shadow-lg top-full right-0 mt-2 min-w-[200px] z-50 dark:bg-base-800 dark:border-base-700"
+                x-cloak x-show="openUserLinks" x-transition x-on:click.outside="openUserLinks = false">
+                {% include "unfold/helpers/theme_switch.html" %}
+
+                {% include "unfold/helpers/language_switch.html" %}
+
+                {% if extra_userlinks %}
+                {{ extra_userlinks }}
+                {% endif %}
+
+                {% include "unfold/helpers/account_links.html" %}
+            </nav>
+        </div>
+    </div>
+    {% endif %}

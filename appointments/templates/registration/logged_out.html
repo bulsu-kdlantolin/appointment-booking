@@ -1,0 +1,111 @@
+{% extends 'unfold/layouts/unauthenticated.html' %}
+
+{% load i18n unfold static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+  rel="stylesheet">
+<style>
+  body,
+  button,
+  a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .material-symbols-outlined,
+  [class*="material-symbols"] {
+    font-family: 'Material Symbols Outlined' !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    letter-spacing: -0.02em;
+  }
+
+  /* Hide unauthenticated header (Return to site & theme switch / dark_mode) */
+  .top-0,
+  div.top-0,
+  div[class*="top-0"] {
+    display: none !important;
+  }
+
+  /* Badge styling in light & dark mode */
+  .logout-icon-badge {
+    width: 72px;
+    height: 72px;
+    background-color: #eff6ff;
+    border: 1px solid #dbeafe;
+    color: #2563eb;
+  }
+
+  html.dark .logout-icon-badge,
+  .dark .logout-icon-badge {
+    background-color: rgba(30, 58, 138, 0.35) !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+  }
+</style>
+{% endblock %}
+
+{% block title %}
+Logged out | {{ site_title }}
+{% endblock %}
+
+{% block content %}
+<div class="mb-8 text-center">
+  <a href="{% url 'appointments:list' %}" class="inline-block transition-transform hover:scale-105 mb-4" title="Return to public appointments">
+    <img src="{% static 'images/logo.svg' %}" alt="Appointment Booking Logo" class="mx-auto h-16 w-16 drop-shadow-sm" />
+  </a>
+  <h1 class="font-heading font-extrabold text-2xl text-base-900 tracking-tight dark:text-base-100">
+    Appointment Booking
+  </h1>
+  <p class="mt-2 text-base-500 text-sm dark:text-base-400">
+    Administration Dashboard
+  </p>
+</div>
+
+<div class="bg-white dark:bg-base-800 rounded-2xl shadow-sm p-6 sm:p-8 text-center" style="border: none !important;">
+  <!-- Status Icon Badge (Logout door icon) -->
+  <div class="flex justify-center mb-6">
+    <div class="logout-icon-badge flex items-center justify-center rounded-2xl shadow-xs">
+      <svg class="select-none" style="width: 42px; height: 42px;" viewBox="0 0 800 800" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M 416 67 L 583 67 L 606 71 L 626 77 L 643 86 L 646 86 L 662 96 L 673 106 L 675 106 L 693 124 L 712 151 L 726 183 L 733 220 L 733 583 L 730 602 L 718 638 L 710 653 L 695 674 L 675 694 L 656 708 L 638 718 L 611 728 L 583 733 L 416 733 L 379 725 L 342 707 L 327 696 L 311 681 L 311 679 L 300 668 L 287 648 L 278 629 L 272 611 L 267 584 L 267 559 L 271 549 L 279 540 L 288 535 L 297 533 L 309 534 L 318 538 L 330 551 L 333 560 L 333 573 L 337 596 L 345 615 L 355 630 L 371 646 L 383 654 L 395 660 L 418 666 L 572 667 L 599 662 L 626 648 L 644 631 L 653 618 L 664 592 L 667 572 L 667 231 L 665 213 L 660 196 L 650 177 L 630 155 L 615 145 L 602 139 L 572 133 L 428 133 L 404 137 L 383 146 L 371 154 L 349 178 L 340 195 L 336 207 L 332 244 L 329 251 L 322 259 L 308 266 L 292 266 L 279 260 L 269 247 L 267 241 L 267 215 L 273 185 L 287 152 L 305 126 L 326 105 L 354 86 L 386 73 Z M 194 267 L 211 268 L 225 277 L 232 289 L 233 307 L 226 322 L 191 367 L 473 367 L 487 373 L 497 385 L 500 395 L 498 413 L 494 420 L 486 428 L 474 433 L 191 433 L 228 481 L 233 493 L 233 507 L 228 519 L 219 528 L 207 533 L 194 533 L 187 531 L 175 523 L 163 505 L 159 502 L 150 488 L 145 484 L 127 460 L 106 438 L 106 436 L 70 401 L 70 399 L 122 346 L 122 344 L 128 339 L 155 303 L 159 300 L 165 290 L 169 287 L 175 277 L 181 272 Z" />
+      </svg>
+    </div>
+  </div>
+
+  <h2 class="font-heading font-bold text-xl text-base-900 dark:text-base-100 tracking-tight">
+    Successfully Logged Out
+  </h2>
+
+  <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+    You have been securely signed out from the administration panel. Your session has ended safely.
+  </p>
+
+  <!-- Action Buttons with generous spacing -->
+  <div class="mt-7 flex flex-col gap-4">
+    {% url "admin:index" as login_url %}
+    <a href="{{ login_url }}"
+       class="w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-all cursor-pointer">
+      <span>Log in again</span>
+      <span class="material-symbols-outlined text-sm">login</span>
+    </a>
+
+    <a href="{% url 'appointments:list' %}"
+       class="w-full inline-flex items-center justify-center gap-2.5 rounded-xl border border-base-200 dark:border-base-700 bg-white dark:bg-base-900 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-xs hover:bg-base-50 dark:hover:bg-base-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">calendar_month</span>
+      <span>View appointments</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% load i18n static %}
+
+<div class="flex items-center gap-3 min-w-0">
+    <a href="{% url 'admin:index' %}"
+        class="shrink-0 transition-opacity hover:opacity-90 flex items-center justify-center">
+        <img src="{% static 'images/logo.svg' %}" alt="Logo" class="h-9 w-9 shrink-0 object-contain" />
+    </a>
+    <div class="flex flex-col grow justify-center min-w-0">
+        <div
+            class="font-heading text-important font-bold tracking-tight text-[17px] leading-tight truncate [&_a]:hover:text-primary-600 [&_a]:transition-colors">
+            {{ branding }}
+        </div>
+
+        {% if site_subheader %}
+        <div class="font-normal text-subtle text-xs mt-0.5 truncate">
+            {{ site_subheader }}
+        </div>
+        {% endif %}
+    </div>
+</div>

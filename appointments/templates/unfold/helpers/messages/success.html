@@ -1,0 +1,13 @@
+<div class="message-success mb-3 px-3.5 py-2.5 leading-[18px] rounded-default bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400 flex items-center justify-between gap-3 {% if class %} {{ class }}{% endif %}">
+    <div class="grow flex items-center gap-2.5">
+        <span class="material-symbols-outlined text-[18px] text-green-600 dark:text-green-400 select-none shrink-0">check_circle</span>
+        <span>{{ message }}</span>
+    </div>
+    <button type="button"
+            onclick="(function(btn){ var target = btn.closest('li') || btn.closest('.message-success'); if(target){ target.classList.add('error-dismiss-target', 'error-dismissing'); setTimeout(function(){ target.style.display='none'; }, 400); } })(this)"
+            class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 cursor-pointer p-0.5 rounded transition-colors select-none flex items-center justify-center"
+            title="Dismiss">
+        <span class="material-symbols-outlined text-[16px]">close</span>
+    </button>
+</div>
+

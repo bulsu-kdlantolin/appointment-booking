@@ -1,0 +1,26 @@
+<div id="modal-overlay" class="backdrop-blur-xs bg-base-900/20 bottom-0 fixed left-0 mr-1 right-0 top-0 z-60 dark:bg-base-900/80"
+     x-cloak
+     x-transition.opacity.duration.25ms
+     x-transition:leave.duration.0ms
+     x-show="openModal || shortcutsOpen || filterModalOpen || openCommandResults"
+     x-on:keydown.escape.window="openModal = shortcutsOpen = filterModalOpen = openCommandResults = false">
+</div>
+
+<div class="flex flex-col fixed inset-0 p-4 lg:p-16 z-[1000] overflow-y-auto"
+     x-cloak
+     x-show="openModal"
+     x-transition:enter
+     x-trap.noautofocus.noscroll="openModal"
+     x-on:keydown.escape.window="openModal = false">
+    <div class="relative mx-auto w-full max-w-4xl my-auto" x-on:click.outside="openModal = false">
+        <button type="button"
+                x-on:click="openModal = false"
+                class="absolute -top-11 right-0 text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-900 rounded-full w-9 h-9 flex items-center justify-center transition-colors cursor-pointer shadow-lg z-[1020]"
+                title="Close (Esc)"
+                aria-label="Close modal">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+        <div id="modal-content" class="bg-white dark:bg-base-800 flex flex-col min-h-0 overflow-hidden rounded-2xl shadow-2xl w-full" x-bind:class="modalContentClasses"></div>
+    </div>
+</div>
+

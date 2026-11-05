@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="brandLogoGrad" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="30%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <!-- Modern Time Arc (Dynamic clock aperture sweeping into confirmed booking) -->
+  <path d="M32 8C45.255 8 56 18.745 56 32C56 45.255 45.255 56 32 56C18.745 56 8 45.255 8 32C8 22.3 13.8 14 22 10" stroke="url(#brandLogoGrad)" stroke-width="6" stroke-linecap="round"/>
+  <!-- The Forward Appointment Checkmark (Confirmed Time Slot) -->
+  <path d="M22 33L29.5 40.5L48 18" stroke="url(#brandLogoGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

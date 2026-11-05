@@ -1,0 +1,21 @@
+{% extends "appointments/base.html" %}
+{% block content %}
+<div class="mx-auto max-w-xl">
+  <p class="mb-1 text-sm font-semibold uppercase tracking-wider text-slate-500">Confirmation</p>
+  <h1 class="text-3xl font-bold tracking-tight">Archive appointment?</h1>
+
+  <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <p class="text-slate-600 leading-relaxed">
+      This will archive (soft delete) the appointment for
+      <strong class="text-slate-900">{{ appointment.client.full_name }}</strong>
+      on {{ appointment.scheduled_at|date:"F j, Y g:i A" }}. The record will remain in the database.
+    </p>
+
+    <form method="post" action="{% url 'appointments:delete' appointment.pk %}" class="mt-6 flex flex-wrap gap-3">
+      {% csrf_token %}
+      <button type="submit" class="rounded-xl bg-slate-800 hover:bg-slate-900 px-5 py-2.5 font-semibold text-white shadow-xs transition hover:-translate-y-0.5 cursor-pointer">Yes, archive</button>
+      <a href="{% url 'appointments:detail' appointment.pk %}" class="rounded-xl border border-slate-300 bg-white px-5 py-2.5 font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 cursor-pointer">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

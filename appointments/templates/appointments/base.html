@@ -1,22 +1,129 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Appointments{% endblock %}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Appointment Booking{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            heading: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
-    h1 { border-bottom: 3px solid #0b5; padding-bottom: .3rem; }
-    a { color: #075; }
-    ul { padding-left: 1.2rem; }
-    li { margin: .5rem 0; }
-    .meta { color: #666; font-size: .9rem; }
-    dt { font-weight: 600; margin-top: .8rem; }
-    dd { margin: 0; }
+    body,
+    input,
+    select,
+    textarea,
+    button {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    nav a.font-bold,
+    .font-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* Keep appointment dates, times, and durations neatly aligned */
+    table,
+    time,
+    .tabular-nums,
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"] {
+      font-variant-numeric: tabular-nums;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.75rem;
+      background: #fff;
+      padding: 0.75rem 0.9rem;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.875rem;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    textarea {
+      min-height: 8rem;
+      padding: 0.75rem 0.9rem;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input[type="datetime-local"] {
+      min-height: 3rem;
+      cursor: pointer;
+      color-scheme: light;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="datetime-local"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+      transform: translateY(-1px);
+    }
+
+    [data-form-dropdown][data-open="true"] [data-form-menu] {
+      pointer-events: auto;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    [data-form-dropdown][data-open="true"] [data-form-chevron] {
+      transform: rotate(180deg);
+    }
   </style>
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
 </head>
-<body>
-  <h1>Appointment Booking</h1>
-  {% block content %}{% endblock %}
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <nav class="border-b border-slate-200 bg-white shadow-sm">
+      <div class="mx-auto flex max-w-5xl items-center px-4 py-3.5 sm:px-6">
+        <a href="{% url 'appointments:list' %}"
+          class="flex items-center gap-3 text-lg font-bold tracking-tight text-slate-900 transition hover:opacity-90">
+          <img src="{% static 'images/logo.svg' %}" alt="Appointment Booking Logo" class="h-8 w-8 shrink-0">
+          <span>Appointment Booking</span>
+        </a>
+      </div>
+  </nav>
+  <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    {% block content %}{% endblock %}
+  </main>
 </body>
+
 </html>

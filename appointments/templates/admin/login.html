@@ -1,0 +1,179 @@
+{% extends 'unfold/layouts/unauthenticated.html' %}
+
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+{{ form.media }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+  rel="stylesheet">
+<style>
+  body,
+  input,
+  select,
+  textarea,
+  button {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .material-symbols-outlined,
+  [class*="material-symbols"] {
+    font-family: 'Material Symbols Outlined' !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    letter-spacing: -0.02em;
+  }
+
+  #id_password {
+    padding-right: 2.75rem !important;
+  }
+</style>
+{% endblock %}
+
+{% block title %}
+{{ title }} | {{ site_title }}
+{% endblock %}
+
+{% block base %}
+<div id="page" class="bg-white flex min-h-screen dark:bg-base-900">
+  <div class="flex grow items-center justify-center mx-auto px-4 relative">
+    <div class="w-full sm:w-96">
+      {% block content %}
+      <div class="mb-8 text-center">
+        <a href="{% url 'appointments:list' %}" class="inline-block transition-transform hover:scale-105 mb-4" title="Return to public appointments">
+          <img src="{% static 'images/logo.svg' %}" alt="Appointment Booking Logo" class="mx-auto h-16 w-16 drop-shadow-sm" />
+        </a>
+        <h1 class="font-heading font-extrabold text-2xl text-base-900 tracking-tight dark:text-base-100">
+          Appointment Booking
+        </h1>
+        <p class="mt-2 text-base-500 text-sm dark:text-base-400">
+          Sign in to your administration dashboard
+        </p>
+      </div>
+
+      {% include "unfold/helpers/messages.html" %}
+
+      {% if form.errors or form.non_field_errors %}
+        <div id="login-error-alert"
+          class="mb-6 flex items-center gap-2.5 px-3.5 py-2.5 rounded-default bg-red-50 border border-red-200 text-red-700 text-sm font-medium shadow-xs dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
+          style="transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease; overflow: hidden; max-height: 120px;">
+          <span
+            class="material-symbols-outlined text-[18px] text-red-500 dark:text-red-400 shrink-0 select-none">error</span>
+          <span class="grow text-xs leading-snug">
+            {% if user.is_authenticated %}
+            {% blocktranslate trimmed %}
+            You are authenticated as {{ username }}, but are not authorized to access this page.
+            {% endblocktranslate %}
+            {% elif form.non_field_errors %}
+            {% translate "Invalid username or password. Please try again." %}
+            {% else %}
+            {% translate "Please enter both your username and password." %}
+            {% endif %}
+          </span>
+          <button type="button" onclick="dismissErrorAlert()"
+            class="text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors cursor-pointer focus:outline-none shrink-0"
+            aria-label="Dismiss error" title="Dismiss error">
+            <span class="material-symbols-outlined text-base select-none leading-none">close</span>
+          </button>
+        </div>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">
+          {% csrf_token %}
+
+          {% include "unfold/helpers/field.html" with field=form.username %}
+
+          <div class="{% if form.password.errors %}errors {% endif %}form-field flex flex-col group mb-4">
+            <div class="flex gap-2 flex-col">
+              {% include "unfold/helpers/form_label.html" with field=form.password %}
+              <div class="relative flex items-center">
+                {{ form.password }}
+                <button type="button" id="togglePasswordBtn" onclick="togglePasswordVisibility()"
+                  class="absolute right-3 flex items-center justify-center text-base-400 hover:text-base-600 dark:hover:text-base-200 transition-colors cursor-pointer focus:outline-none"
+                  aria-label="Toggle password visibility" title="Toggle password visibility">
+                  <span id="togglePasswordIcon"
+                    class="material-symbols-outlined text-xl select-none leading-none">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            {% include "unfold/helpers/form_errors.html" with errors=form.password.errors %}
+            {% include "unfold/helpers/help_text.html" with help_text=form.password.help_text %}
+          </div>
+
+          <div class="flex flex-col gap-3 mt-6">
+            <button type="submit"
+              class="w-full inline-flex items-center justify-center gap-2.5 rounded-default bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-all cursor-pointer">
+              <span>{% translate 'Sign In' %}</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-8 text-center text-sm">
+          <a href="{% url 'appointments:list' %}"
+            class="inline-flex items-center gap-2 font-medium text-primary-600 hover:text-primary-700 transition-colors"
+            style="text-decoration: none !important;">
+            &larr; Back to appointment schedule
+          </a>
+        </div>
+
+        <script>
+          function togglePasswordVisibility() {
+            const input = document.getElementById('id_password');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+              input.type = 'text';
+              icon.textContent = 'visibility_off';
+              icon.setAttribute('title', 'Hide password');
+            } else {
+              input.type = 'password';
+              icon.textContent = 'visibility';
+              icon.setAttribute('title', 'Show password');
+            }
+          }
+
+          function dismissErrorAlert() {
+            const alert = document.getElementById('login-error-alert');
+            if (!alert) return;
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-6px)';
+            setTimeout(function () {
+              alert.style.maxHeight = '0px';
+              alert.style.paddingTop = '0px';
+              alert.style.paddingBottom = '0px';
+              alert.style.marginTop = '0px';
+              alert.style.marginBottom = '0px';
+              alert.style.borderWidth = '0px';
+              setTimeout(function () {
+                if (alert.parentNode) {
+                  alert.parentNode.removeChild(alert);
+                }
+              }, 400);
+            }, 150);
+          }
+
+          document.addEventListener('DOMContentLoaded', function () {
+            const alert = document.getElementById('login-error-alert');
+            if (alert) {
+              setTimeout(dismissErrorAlert, 4000);
+            }
+          });
+        </script>
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+  {% endblock %}
