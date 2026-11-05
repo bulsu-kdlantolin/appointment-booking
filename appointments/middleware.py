@@ -15,8 +15,8 @@ class Custom404Middleware:
     def __call__(self, request):
         response = self.get_response(request)
         if response.status_code == 404:
-            # Don't intercept static file 404s or admin 404s
-            if not request.path.startswith("/static/") and not request.path.startswith("/admin/"):
+            # Don't intercept static file 404s
+            if not request.path.startswith("/static/"):
                 response = render(request, "404.html", status=404)
         response["Cache-Control"] = "no-cache, no-store, must-revalidate"
         response["Pragma"] = "no-cache"

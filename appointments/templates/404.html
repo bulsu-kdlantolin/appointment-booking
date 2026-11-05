@@ -7,31 +7,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found | Appointment Booking</title>
   <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script>
+    if (
+      localStorage.getItem("theme") === "dark" ||
+      localStorage.getItem("unfold_theme") === "dark" ||
+      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  </script>
 </head>
 
-<body class="min-h-screen bg-slate-50 text-slate-900">
-  <nav class="border-b border-slate-200 bg-white shadow-sm">
-      <div class="mx-auto max-w-5xl px-4 py-3.5 sm:px-6">
+<body class="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100 flex flex-col">
+  <nav class="border-b border-slate-200 bg-white shadow-xs transition-colors dark:border-slate-800 dark:bg-slate-900">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3.5 sm:px-6">
+      <a href="{% url 'appointments:list' %}"
+        class="flex items-center gap-3 text-lg font-bold tracking-tight text-slate-900 transition hover:opacity-90 dark:text-white">
+        <img src="{% static 'images/logo.svg' %}" alt="Appointment Booking Logo" class="h-8 w-8 shrink-0">
+        <span>AppointEase</span>
+      </a>
+      {% if request.path|slice:":7" == "/admin/" %}
+      <a href="{% url 'admin:index' %}" class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+        Admin Dashboard
+      </a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="mx-auto flex flex-1 w-full max-w-5xl items-center justify-center px-4 py-16 sm:px-6 sm:py-24">
+    <section class="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm transition-colors sm:p-12 dark:border-slate-800 dark:bg-slate-900">
+      <div
+        class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-2xl font-bold text-red-600 dark:bg-red-950/40 dark:text-red-400">
+        ?</div>
+      <p class="mb-2 text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400">Error 404</p>
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">Page not found</h1>
+      <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+        The page you are looking for may have moved, been removed, or never existed.
+      </p>
+
+      {% if request.path|slice:":7" == "/admin/" %}
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a href="{% url 'admin:index' %}"
+          class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-500">
+          Return to Admin Dashboard
+        </a>
         <a href="{% url 'appointments:list' %}"
-          class="flex items-center gap-3 text-lg font-bold tracking-tight text-slate-900 transition hover:opacity-90">
-          <img src="{% static 'images/logo.svg' %}" alt="Appointment Booking Logo" class="h-8 w-8 shrink-0">
-          <span>Appointment Booking</span>
+          class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+          Public Appointments
         </a>
       </div>
-  </nav>
-  <main class="mx-auto flex max-w-5xl justify-center px-4 py-16 sm:px-6 sm:py-24">
-    <section class="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-12">
-      <div
-        class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-2xl font-bold text-red-600">
-        ?</div>
-      <p class="mb-2 text-sm font-bold uppercase tracking-widest text-red-600">Error 404</p>
-      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Page not found</h1>
-      <p class="mx-auto mt-3 max-w-md leading-7 text-slate-500">The page you are looking for may have moved, been
-        removed, or never existed.</p>
-      <a href="{% url 'appointments:list' %}"
-        class="mt-8 inline-flex rounded-xl bg-red-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200">Return
-        to appointments</a>
+      {% else %}
+      <div class="mt-8 flex justify-center">
+        <a href="{% url 'appointments:list' %}"
+          class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+          Return to appointments
+        </a>
+      </div>
+      {% endif %}
     </section>
   </main>
 </body>
