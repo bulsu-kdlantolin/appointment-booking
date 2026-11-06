@@ -14,13 +14,22 @@
     // 1. Initialize Date Pickers (only original visible inputs without flatpickr-input)
     const dateInputs = document.querySelectorAll('input.vDateField:not(.flatpickr-input):not([type="hidden"])');
     dateInputs.forEach((input) => {
+      // Block off all past dates unconditionally for both adding and editing
       const fp = flatpickr(input, {
         dateFormat: 'Y-m-d',
         monthSelectorType: 'static',
+        minDate: 'today',
         disableMobile: true,
-        allowInput: true,
+        allowInput: false,
       });
       fp._positionElement = fp.input;
+    });
+
+    // Ensure any previously initialized date fields enforce minDate: today
+    document.querySelectorAll('input.vDateField').forEach((input) => {
+      if (input._flatpickr) {
+        input._flatpickr.set('minDate', 'today');
+      }
     });
 
     // 2. Initialize Time Pickers (only original visible inputs without flatpickr-input)

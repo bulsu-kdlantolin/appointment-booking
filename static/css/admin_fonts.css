@@ -416,79 +416,147 @@ label:has(input[type="checkbox"]) {
   cursor: pointer !important;
 }
 
-/* Blue Theme for Selected Rows in Admin Changelist (replacing yellow/amber) */
-table tr.selected td,
-table tr.selected th,
-tr.selected td,
-tr.selected th,
-tr.selected {
-  background-color: rgba(37, 99, 235, 0.08) !important;
+/* Table Header Sorting Controls (arrow_circle_down/up and cancel) */
+#result_list thead,
+table thead {
+  position: relative !important;
+  z-index: 10 !important;
 }
 
-.dark table tr.selected td,
-.dark table tr.selected th,
-.dark tr.selected td,
-.dark tr.selected th,
-.dark tr.selected {
-  background-color: rgba(37, 99, 235, 0.18) !important;
+#result_list thead th,
+table thead th {
+  position: relative !important;
+  z-index: 10 !important;
 }
 
-table tr.selected:hover td,
-table tr.selected:hover th,
-tr.selected:hover td,
-tr.selected:hover th {
-  background-color: rgba(37, 99, 235, 0.12) !important;
+#result_list thead th a,
+table thead th a {
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
-.dark table tr.selected:hover td,
-.dark table tr.selected:hover th,
-.dark tr.selected:hover td,
-.dark tr.selected:hover th {
-  background-color: rgba(37, 99, 235, 0.24) !important;
+#result_list thead th .sortoptions,
+table thead th .sortoptions {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  vertical-align: middle !important;
+  pointer-events: auto !important;
 }
 
-/* Refined Dark Mode Highlight for Sidebar Active Navigation Items */
-.dark #nav-sidebar-apps ol>li>a.active,
-.dark #nav-sidebar-apps ol>li>a.bg-primary-50,
-.dark #nav-sidebar-apps ul li a.active,
-.dark #nav-sidebar-apps ul li a.bg-primary-50,
-.dark #nav-sidebar-apps a.active,
-.dark #nav-sidebar-apps a.bg-primary-50,
-.dark #nav-sidebar-apps a[class*="dark:bg-blue-600"],
-.dark #nav-sidebar-apps a[class*="dark:bg-primary-950"] {
-  background-color: rgba(30, 58, 138, 0.40) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(59, 130, 246, 0.40) !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4) !important;
-  font-weight: 600 !important;
+#result_list thead th .sortoptions a,
+table thead th .sortoptions a {
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 4px !important;
+  padding: 1px !important;
+  transition: color 0.15s ease, transform 0.15s ease !important;
 }
 
-.dark #nav-sidebar-apps ol>li>a.active .material-symbols-outlined,
-.dark #nav-sidebar-apps ol>li>a.bg-primary-50 .material-symbols-outlined,
-.dark #nav-sidebar-apps ul li a.active .material-symbols-outlined,
-.dark #nav-sidebar-apps ul li a.bg-primary-50 .material-symbols-outlined,
-.dark #nav-sidebar-apps a.active .material-symbols-outlined,
-.dark #nav-sidebar-apps a.bg-primary-50 .material-symbols-outlined,
-.dark #nav-sidebar-apps a[class*="dark:bg-blue-600"] .material-symbols-outlined,
-.dark #nav-sidebar-apps a[class*="dark:bg-primary-950"] .material-symbols-outlined {
+#result_list thead th .sortoptions a:hover,
+table thead th .sortoptions a:hover {
+  transform: scale(1.15) !important;
+}
+
+#result_list thead th .sortoptions a.toggle:hover,
+table thead th .sortoptions a.toggle:hover {
+  color: #2563eb !important;
+}
+
+.dark #result_list thead th .sortoptions a.toggle:hover,
+.dark table thead th .sortoptions a.toggle:hover {
   color: #60a5fa !important;
 }
 
-/* Hover state for active sidebar items in dark mode */
-.dark #nav-sidebar-apps ol>li>a.active:hover,
-.dark #nav-sidebar-apps ol>li>a.bg-primary-50:hover,
-.dark #nav-sidebar-apps ul li a.active:hover,
-.dark #nav-sidebar-apps ul li a.bg-primary-50:hover {
-  background-color: rgba(30, 58, 138, 0.55) !important;
-  color: #ffffff !important;
-}
 
-/* Inactive sidebar dropdown items hover in dark mode */
-.dark #nav-sidebar-apps ul li a:not(.active):not(.bg-primary-50):hover {
-  background-color: rgba(255, 255, 255, 0.06) !important;
-  color: #f8fafc !important;
-}
+  .sortoptions a.sortremove {
+    display: none !important;
+  }
 
-.dark #nav-sidebar-apps ul li a:not(.active):not(.bg-primary-50):hover .material-symbols-outlined {
-  color: #cbd5e1 !important;
-}
+  #result_list thead th .sortoptions .material-symbols-outlined,
+  table thead th .sortoptions .material-symbols-outlined {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+  }
+
+  /* Blue Theme for Selected Rows in Admin Changelist (replacing yellow/amber) */
+  table tr.selected td,
+  table tr.selected th,
+  tr.selected td,
+  tr.selected th,
+  tr.selected {
+    background-color: rgba(37, 99, 235, 0.08) !important;
+  }
+
+  .dark table tr.selected td,
+  .dark table tr.selected th,
+  .dark tr.selected td,
+  .dark tr.selected th,
+  .dark tr.selected {
+    background-color: rgba(37, 99, 235, 0.18) !important;
+  }
+
+  table tr.selected:hover td,
+  table tr.selected:hover th,
+  tr.selected:hover td,
+  tr.selected:hover th {
+    background-color: rgba(37, 99, 235, 0.12) !important;
+  }
+
+  .dark table tr.selected:hover td,
+  .dark table tr.selected:hover th,
+  .dark tr.selected:hover td,
+  .dark tr.selected:hover th {
+    background-color: rgba(37, 99, 235, 0.24) !important;
+  }
+
+  /* Refined Dark Mode Highlight for Sidebar Active Navigation Items */
+  .dark #nav-sidebar-apps ol>li>a.active,
+  .dark #nav-sidebar-apps ol>li>a.bg-primary-50,
+  .dark #nav-sidebar-apps ul li a.active,
+  .dark #nav-sidebar-apps ul li a.bg-primary-50,
+  .dark #nav-sidebar-apps a.active,
+  .dark #nav-sidebar-apps a.bg-primary-50,
+  .dark #nav-sidebar-apps a[class*="dark:bg-blue-600"],
+  .dark #nav-sidebar-apps a[class*="dark:bg-primary-950"] {
+    background-color: rgba(30, 58, 138, 0.40) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(59, 130, 246, 0.40) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4) !important;
+    font-weight: 600 !important;
+  }
+
+  .dark #nav-sidebar-apps ol>li>a.active .material-symbols-outlined,
+  .dark #nav-sidebar-apps ol>li>a.bg-primary-50 .material-symbols-outlined,
+  .dark #nav-sidebar-apps ul li a.active .material-symbols-outlined,
+  .dark #nav-sidebar-apps ul li a.bg-primary-50 .material-symbols-outlined,
+  .dark #nav-sidebar-apps a.active .material-symbols-outlined,
+  .dark #nav-sidebar-apps a.bg-primary-50 .material-symbols-outlined,
+  .dark #nav-sidebar-apps a[class*="dark:bg-blue-600"] .material-symbols-outlined,
+  .dark #nav-sidebar-apps a[class*="dark:bg-primary-950"] .material-symbols-outlined {
+    color: #60a5fa !important;
+  }
+
+  /* Hover state for active sidebar items in dark mode */
+  .dark #nav-sidebar-apps ol>li>a.active:hover,
+  .dark #nav-sidebar-apps ol>li>a.bg-primary-50:hover,
+  .dark #nav-sidebar-apps ul li a.active:hover,
+  .dark #nav-sidebar-apps ul li a.bg-primary-50:hover {
+    background-color: rgba(30, 58, 138, 0.55) !important;
+    color: #ffffff !important;
+  }
+
+  /* Inactive sidebar dropdown items hover in dark mode */
+  .dark #nav-sidebar-apps ul li a:not(.active):not(.bg-primary-50):hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #f8fafc !important;
+  }
+
+  .dark #nav-sidebar-apps ul li a:not(.active):not(.bg-primary-50):hover .material-symbols-outlined {
+    color: #cbd5e1 !important;
+  }

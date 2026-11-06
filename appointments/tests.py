@@ -17,7 +17,7 @@ class AppointmentFormTests(TestCase):
         self.service = Service.objects.create(name="Cut", duration_minutes=30)
 
     def _future_slot(self, days=1):
-        return (timezone.now() + timedelta(days=days)).replace(
+        return (timezone.localtime(timezone.now()) + timedelta(days=days)).replace(
             minute=0, second=0, microsecond=0
         )
 
@@ -29,6 +29,25 @@ class AppointmentFormTests(TestCase):
             "scheduled_at": past,
             "status": "scheduled",
         })
+        self.assertFalse(form.is_valid())
+        self.assertIn("scheduled_at", form.errors)
+
+    def test_admin_off_grid_minute_rejected(self):
+        slot = self._future_slot().replace(minute=15)
+        request = RequestFactory().get("/admin/")
+        request.user = AnonymousUser()
+        admin_form_class = AppointmentAdmin(
+            Appointment, django_admin.site
+        ).get_form(request)
+        form = admin_form_class(
+            data={
+                "client": self.client_obj.pk,
+                "service": self.service.pk,
+                "scheduled_at": slot.strftime("%Y-%m-%d %H:%M:%S"),
+                "status": "scheduled",
+                "notes": "",
+            }
+        )
         self.assertFalse(form.is_valid())
         self.assertIn("scheduled_at", form.errors)
 
@@ -149,7 +168,7 @@ class AppointmentWorkflowTests(TestCase):
         self.service = Service.objects.create(name="Consultation", duration_minutes=45)
 
     def _slot(self, days=1):
-        return (timezone.now() + timedelta(days=days)).replace(
+        return (timezone.localtime(timezone.now()) + timedelta(days=days)).replace(
             minute=0, second=0, microsecond=0
         )
 
@@ -423,6 +442,23 @@ class AppointmentModelAndQueryTests(TestCase):
         self.assertIn(self.appointment, appointments)
         self.assertNotIn(archived, appointments)
 
+    def test_date_filter_this_year(self):
+        # Create an appointment for next year
+        next_year_slot = self.now.replace(year=self.now.year + 1)
+        next_year_appt = Appointment.objects.create(
+            client=self.client_obj,
+            service=self.service,
+            scheduled_at=next_year_slot,
+        )
+
+        response = self.client.get(reverse("appointments:list"), {"date": "year"})
+        self.assertEqual(response.status_code, 200)
+        appointments = response.context["appointments"]
+        self.assertIn(self.appointment, appointments)
+        self.assertNotIn(next_year_appt, appointments)
+        self.assertContains(response, 'data-date-option="year"')
+        self.assertContains(response, "This Year")
+
     def test_delete_confirmation_post_sets_archived_instead_of_delete(self):
         appt = Appointment.objects.create(
             client=self.client_obj,
@@ -508,5 +544,25 @@ class UserGroupPermissionsTests(TestCase):
         pub_response = self.client.get("/nonexistent-public-url/")
         self.assertEqual(pub_response.status_code, 404)
         self.assertContains(pub_response, "Page not found", status_code=404)
+
+    def test_admin_scheduled_at_radio_filter(self):
+        self.client.login(username="super_admin", password="password123")
+        response = self.client.get("/admin/appointments/appointment/")
+        self.assertEqual(response.status_code, 200)
+
+        # Radio button inputs present
+        self.assertContains(response, 'type="radio"')
+        self.assertContains(response, 'name="scheduled_at"')
+        self.assertContains(response, "Any date")
+        self.assertContains(response, "Today")
+        self.assertContains(response, "This week")
+        self.assertContains(response, "This month")
+        self.assertContains(response, "This year")
+        self.assertNotContains(response, "Past 7 days")
+
+        # Test filtering by week
+        week_resp = self.client.get("/admin/appointments/appointment/?scheduled_at=week")
+        self.assertEqual(week_resp.status_code, 200)
+
 
 

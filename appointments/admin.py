@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django import forms
 from django.contrib import admin
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
@@ -5,11 +7,14 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.template.response import TemplateResponse
+from django.utils import timezone
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import (
     BooleanRadioFilter as UnfoldBooleanRadioFilter,
     ChoicesRadioFilter,
+    RadioFilter,
     RelatedDropdownFilter,
 )
 from unfold.contrib.filters.forms import RadioForm
@@ -19,6 +24,7 @@ from unfold.widgets import UnfoldAdminSplitDateTimeWidget
 from .models import Appointment, Client, Service
 
 
+# Logs out the administrator and renders the custom styled logout screen.
 def custom_admin_logout(request, extra_context=None):
     auth_logout(request)
     context = {
@@ -61,6 +67,55 @@ class RelatedRadioFilter(RelatedDropdownFilter):
                 data={self.lookup_kwarg: self.value()},
             ),
         }
+
+
+# Custom admin filter providing radio button choices for appointment date ranges.
+class ScheduledAtRadioFilter(RadioFilter):
+    title = _("Scheduled at")
+    parameter_name = "scheduled_at"
+    all_option = ["", _("Any date")]
+
+    def lookups(self, request, model_admin):
+        return [
+            ("today", _("Today")),
+            ("week", _("This week")),
+            ("month", _("This month")),
+            ("year", _("This year")),
+        ]
+
+    def queryset(self, request, queryset):
+        val = self.value()
+        if not val:
+            return queryset
+
+        now = timezone.now()
+        if timezone.is_aware(now):
+            now = timezone.localtime(now)
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        if val == "today":
+            tomorrow = today + timedelta(days=1)
+            return queryset.filter(scheduled_at__gte=today, scheduled_at__lt=tomorrow)
+        elif val == "week":
+            start_of_week = today - timedelta(days=today.weekday())
+            next_week = start_of_week + timedelta(days=7)
+            return queryset.filter(scheduled_at__gte=start_of_week, scheduled_at__lt=next_week)
+        elif val == "month":
+            if today.month == 12:
+                next_month = today.replace(year=today.year + 1, month=1, day=1)
+            else:
+                next_month = today.replace(month=today.month + 1, day=1)
+            return queryset.filter(
+                scheduled_at__gte=today.replace(day=1),
+                scheduled_at__lt=next_month,
+            )
+        elif val == "year":
+            next_year = today.replace(year=today.year + 1, month=1, day=1)
+            return queryset.filter(
+                scheduled_at__gte=today.replace(month=1, day=1),
+                scheduled_at__lt=next_year,
+            )
+        return queryset
 
 
 admin.site.unregister(User)
@@ -109,8 +164,36 @@ class ServiceAdmin(ModelAdmin):
     ordering = ("name",)
 
 
+# Form used in the admin panel with past-date and scheduling validation.
+class AppointmentAdminForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = "__all__"
+
+    def clean_scheduled_at(self):
+        scheduled_at = self.cleaned_data.get("scheduled_at")
+        status = self.cleaned_data.get("status")
+        is_archived = self.cleaned_data.get("is_archived")
+
+        if scheduled_at:
+            # Enforce 30-minute interval slots (:00 or :30) in admin
+            if scheduled_at.minute not in (0, 30):
+                raise forms.ValidationError(
+                    "Appointments must start on a 30-minute slot (e.g., 9:00 or 9:30)."
+                )
+
+            if status == "scheduled" and not is_archived:
+                # Check if creating a new appointment or changing the date on an existing one
+                if not self.instance.pk or self.instance.scheduled_at != scheduled_at:
+                    if scheduled_at < timezone.now():
+                        raise forms.ValidationError("Appointments cannot be scheduled in the past.")
+
+        return scheduled_at
+
+
 @admin.register(Appointment)
 class AppointmentAdmin(ModelAdmin):
+    form = AppointmentAdminForm
     compressed_fields = True
     warn_unsaved_form = True
     formfield_overrides = {
@@ -126,7 +209,7 @@ class AppointmentAdmin(ModelAdmin):
         "is_archived",
     )
     list_filter = (
-        ("scheduled_at", admin.DateFieldListFilter),
+        ScheduledAtRadioFilter,
         ("service", RelatedRadioFilter),
         ("status", ChoicesRadioFilter),
         ("is_archived", BooleanRadioFilter),
@@ -134,6 +217,7 @@ class AppointmentAdmin(ModelAdmin):
     search_fields = ("client__full_name", "client__email", "service__name")
     ordering = ("scheduled_at",)
 
+    # Renders a color-coded HTML badge displaying the appointment status.
     @admin.display(description="Status", ordering="status")
     def status_badge(self, obj):
         colors = {

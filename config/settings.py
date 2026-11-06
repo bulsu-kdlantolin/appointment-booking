@@ -74,7 +74,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 USE_I18N = True
 USE_TZ = True
 
@@ -118,7 +118,7 @@ UNFOLD = {
     "STYLES": [
         lambda request: static("css/admin_fonts.css"),
         lambda request: static("vendor/flatpickr/flatpickr.min.css"),
-        lambda request: static("css/flatpickr_theme.css"),
+        lambda request: static("css/flatpickr_theme.css") + "?v=20261106_v7",
         lambda request: static("css/custom_dropdown.css"),
         lambda request: static("css/auto_dismiss_errors.css"),
         lambda request: static("css/admin_permissions.css"),
@@ -127,7 +127,7 @@ UNFOLD = {
         lambda request: static("js/admin_theme_default.js"),
         lambda request: static("vendor/flatpickr/flatpickr.min.js"),
         lambda request: static("js/custom_dropdown.js"),
-        lambda request: static("js/admin_datetime_picker.js"),
+        lambda request: static("js/admin_datetime_picker.js") + "?v=20261106_v5",
         lambda request: static("js/flatpickr_ampm_toggle.js"),
         lambda request: static("js/auto_dismiss_errors.js"),
         lambda request: static("js/admin_permissions.js"),

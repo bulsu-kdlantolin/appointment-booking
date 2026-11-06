@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Appointment
 
 
+# Form for creating and editing appointments with custom datetime widgets and conflict validation.
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
@@ -30,6 +31,7 @@ class AppointmentForm(forms.ModelForm):
             "%Y-%m-%d %H:%M:%S",
         ]
 
+    # Validates that the appointment date is in the future and aligns with 30-minute intervals.
     def clean_scheduled_at(self):
         scheduled_at = self.cleaned_data["scheduled_at"]
 
@@ -43,6 +45,7 @@ class AppointmentForm(forms.ModelForm):
 
         return scheduled_at
 
+    # Validates that no other scheduled appointment conflicts with this chosen time slot.
     def clean(self):
         cleaned = super().clean()
         scheduled_at = cleaned.get("scheduled_at")
@@ -60,8 +63,9 @@ class AppointmentForm(forms.ModelForm):
             conflicts = conflicts.exclude(pk=self.instance.pk)
 
         if conflicts.exists():
-            raise forms.ValidationError(
-                "Another scheduled appointment already occupies this time slot."
+            self.add_error(
+                "scheduled_at",
+                "Another scheduled appointment already occupies this time slot.",
             )
 
         return cleaned

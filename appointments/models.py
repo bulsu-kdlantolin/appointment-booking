@@ -1,7 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
 
+# Stores service details such as name, duration, and availability.
 class Service(models.Model):
     name = models.CharField(max_length=100, unique=True)
     duration_minutes = models.PositiveIntegerField()
@@ -11,6 +13,7 @@ class Service(models.Model):
         return self.name
 
 
+# Stores client contact information including full name, email, and phone number.
 class Client(models.Model):
     full_name = models.CharField(max_length=120)
     email = models.EmailField()
@@ -20,6 +23,7 @@ class Client(models.Model):
         return self.full_name
 
 
+# Connects a client and a service to a scheduled date and time with status tracking.
 class Appointment(models.Model):
     STATUS_CHOICES = [
         ("scheduled", "Scheduled"),
@@ -40,6 +44,7 @@ class Appointment(models.Model):
     class Meta:
         ordering = ["scheduled_at"]
 
+    # Validates at the model level that no conflicting appointment shares the same time slot.
     def clean(self):
         super().clean()
         if (
@@ -48,6 +53,18 @@ class Appointment(models.Model):
             or not self.scheduled_at
         ):
             return
+
+        # Prevents creating new appointments in the past
+        if not self.pk and self.scheduled_at < timezone.now():
+            raise ValidationError(
+                {"scheduled_at": "Appointments cannot be scheduled in the past."}
+            )
+
+        # Enforces appointments to start on 30-minute intervals (:00 or :30)
+        if self.scheduled_at.minute not in (0, 30):
+            raise ValidationError(
+                {"scheduled_at": "Appointments must start on a 30-minute slot (e.g., 9:00 or 9:30)."}
+            )
 
         conflicts = Appointment.objects.filter(
             scheduled_at=self.scheduled_at,

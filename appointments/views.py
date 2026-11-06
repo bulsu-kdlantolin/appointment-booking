@@ -6,6 +6,7 @@ from .models import Appointment, Service
 from .forms import AppointmentForm
 
 
+# Displays active or archived appointments with search, status, service, and date filtering.
 def appointment_list(request):
     q = request.GET.get("q", "").strip()
     status = request.GET.get("status", "")
@@ -45,6 +46,10 @@ def appointment_list(request):
                 scheduled_at__year=today.year,
                 scheduled_at__month=today.month,
             )
+        elif date_filter in ("year", "this_year"):
+            appointments = appointments.filter(
+                scheduled_at__year=today.year,
+            )
         else:
             try:
                 parsed_date = datetime.strptime(date_filter, "%Y-%m-%d").date()
@@ -69,6 +74,7 @@ def appointment_list(request):
     )
 
 
+# Renders the detailed view of a single appointment.
 def appointment_detail(request, pk):
     appointment = get_object_or_404(
         Appointment.objects.select_related("client", "service"),
@@ -81,6 +87,7 @@ def appointment_detail(request, pk):
     )
 
 
+# Restores an archived appointment back to active status after validating no scheduling conflicts.
 def appointment_unarchive(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
 
@@ -111,6 +118,7 @@ def appointment_unarchive(request, pk):
     return redirect("appointments:detail", pk=appointment.pk)
 
 
+# Handles booking a new appointment through form submission and validation.
 def appointment_create(request):
     if request.method == "POST":
         form = AppointmentForm(request.POST)
@@ -127,6 +135,7 @@ def appointment_create(request):
     )
 
 
+# Handles editing an existing appointment's details or schedule.
 def appointment_update(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
 
@@ -145,10 +154,12 @@ def appointment_update(request, pk):
     )
 
 
+# Redirects archive requests to the appointment deletion/archiving workflow.
 def appointment_archive(request, pk):
     return appointment_delete(request, pk)
 
 
+# Soft-deletes (archives) or permanently deletes an appointment based on user confirmation.
 def appointment_delete(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
 
@@ -171,5 +182,6 @@ def appointment_delete(request, pk):
         {"appointment": appointment},
     )
 
+# Renders a custom styled 404 page when a requested URL is not found.
 def custom_404(request, exception=None):
     return render(request, "404.html", status=404)

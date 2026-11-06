@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="{% static 'css/flatpickr_theme.css' %}">
+<link rel="stylesheet" href="{% static 'css/flatpickr_theme.css' %}?v=20261106_v7">
 <style>
     .flatpickr-time input::-webkit-inner-spin-button {
       appearance: none;
@@ -68,7 +68,7 @@
   {% csrf_token %}
 
   {% if form.non_field_errors %}
-  <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+  <div class="form-error-alert mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 transition-all duration-500">
     {{ form.non_field_errors }}
   </div>
   {% endif %}
@@ -140,7 +140,12 @@
     </div>
     {% endif %}
     {% if field.errors %}
-    <p class="mt-1 text-sm text-red-700">{{ field.errors|striptags }}</p>
+    <p class="form-field-error mt-1.5 flex items-center gap-1.5 text-sm text-red-600 transition-all duration-500">
+      <svg class="h-4 w-4 shrink-0 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      <span>{{ field.errors|striptags }}</span>
+    </p>
     {% endif %}
   </div>
   {% endfor %}
@@ -155,7 +160,7 @@
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="{% static 'js/flatpickr_ampm_toggle.js' %}"></script>
+<script src="{% static 'js/flatpickr_ampm_toggle.js' %}?v=20261106_v6"></script>
 <script>
   const formDropdowns = document.querySelectorAll("[data-form-dropdown]");
 
@@ -205,7 +210,8 @@
         dateFormat: "Y-m-d",
         minDate: "today",
         monthSelectorType: "static",
-        disableMobile: true
+        disableMobile: true,
+        allowInput: false
       });
       const timePicker = flatpickr(scheduledTime, {
         noCalendar: true,
@@ -246,5 +252,39 @@
       datePicker.config.onChange.push(syncScheduledAt);
       timePicker.config.onChange.push(syncScheduledAt);
     }
+
+    // Auto-dismiss error messages after 5 seconds with smooth fade-out and slide-up
+    setTimeout(() => {
+      const errorAlerts = document.querySelectorAll('.form-error-alert, .form-field-error');
+      errorAlerts.forEach((el) => {
+        el.style.transition = 'opacity 0.6s ease, max-height 0.6s ease, margin 0.6s ease, padding 0.6s ease';
+        el.style.opacity = '0';
+        el.style.maxHeight = el.scrollHeight + 'px';
+        setTimeout(() => {
+          el.style.maxHeight = '0';
+          el.style.marginTop = '0';
+          el.style.marginBottom = '0';
+          el.style.paddingTop = '0';
+          el.style.paddingBottom = '0';
+          el.style.overflow = 'hidden';
+          setTimeout(() => el.remove(), 600);
+        }, 50);
+      });
+    }, 5000);
+
+    // Auto-dismiss field error as soon as user modifies input
+    document.querySelectorAll('input, select, textarea').forEach((input) => {
+      input.addEventListener('input', () => {
+        const container = input.closest('.mb-6');
+        if (container) {
+          const err = container.querySelector('.form-field-error');
+          if (err) {
+            err.style.transition = 'opacity 0.3s ease';
+            err.style.opacity = '0';
+            setTimeout(() => err.remove(), 300);
+          }
+        }
+      });
+    });
 </script>
 {% endblock %}

@@ -3,6 +3,7 @@ from . import views
 
 app_name = "appointments"
 
+# URL patterns mapping browser endpoints to their corresponding appointment view functions.
 urlpatterns = [
     path("", views.appointment_list, name="list"),
     path("", views.appointment_list, name="appointment_list"),

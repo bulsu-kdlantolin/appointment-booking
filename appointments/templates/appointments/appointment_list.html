@@ -83,6 +83,7 @@
           {% elif date_filter == "tomorrow" %}Tomorrow
           {% elif date_filter == "week" %}This Week
           {% elif date_filter == "month" %}This Month
+          {% elif date_filter == "year" or date_filter == "this_year" %}This Year
           {% else %}All Dates{% endif %}
         </span>
         <span class="flex h-5 w-5 shrink-0 items-center justify-center text-slate-400 transition-transform duration-200" data-date-chevron aria-hidden="true">
@@ -97,6 +98,7 @@
         <button type="button" class="block w-full rounded-lg px-3 py-1.5 text-left text-sm transition hover:bg-blue-50 cursor-pointer" data-date-option="tomorrow" data-label="Tomorrow">Tomorrow</button>
         <button type="button" class="block w-full rounded-lg px-3 py-1.5 text-left text-sm transition hover:bg-blue-50 cursor-pointer" data-date-option="week" data-label="This Week">This Week</button>
         <button type="button" class="block w-full rounded-lg px-3 py-1.5 text-left text-sm transition hover:bg-blue-50 cursor-pointer" data-date-option="month" data-label="This Month">This Month</button>
+        <button type="button" class="block w-full rounded-lg px-3 py-1.5 text-left text-sm transition hover:bg-blue-50 cursor-pointer" data-date-option="year" data-label="This Year">This Year</button>
       </div>
     </div>
 
